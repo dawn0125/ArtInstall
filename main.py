@@ -81,10 +81,10 @@ while True:
     pygame.draw.circle(bg, 'azure2', (700, 200), 20)
     pygame.draw.circle(bg, 'azure2', (700, 300), 20)
     
-    x = np.arctan((pygame.mouse.get_pos()[1] - 100) / 100)
+    x = np.arctan((pygame.mouse.get_pos()[0] - 100) / 200)
     print(x)
 
-    # pygame.draw.circle(bg, 'black', pygame.mouse.get_pos(), 5)
+    pygame.draw.circle(bg, 'black', pygame.mouse.get_pos(), 5)
     # screen.blit(eye, ey_rect)
     # screen.blit(iris, iris_rect)
 
