@@ -12,6 +12,16 @@ from sys import exit
 import serial 
 import numpy as np 
 
+def getPosition():
+    # get data from MSP430 
+    data = ser.read(1) 
+    if len(data) > 0: 
+        distance = ord(data) 
+        print(distance)
+        theta = ((distance - x0) // y)
+        
+    return theta 
+
 # read port (information coming from MSP430)
 # port = '/dev/tty.usbmodem11203'
 x0 = np.array([])
@@ -43,12 +53,7 @@ while True:
             pygame.quit() 
             exit() 
     
-    # get data from MSP430 
-    # data = ser.read(1) 
-    # if len(data) > 0: 
-    #     distance = ord(data) 
-    #     print(distance)
-    #     theta = ((distance - x0) // y)
+    pos = getPosition()
     
     # update surfaces 
     screen.blit(bg, (0,0))
