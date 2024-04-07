@@ -30,8 +30,8 @@ bg = pygame.Surface((800, 400)).convert_alpha()
 bg.fill('White')
 
 eyeball = pygame.image.load('eyeball3.png')
-eyeball = pygame.transform.scale(eyeball, (40,40))
-eyeball_rect = eyeball.get_rect(center = (400, 200))
+eyeball = pygame.transform.scale(eyeball, (50, 50))
+eyeball_rect = eyeball.get_rect()
 
 iris = pygame.image.load('iris3.png')
 iris = pygame.transform.scale(iris, (10,10))
@@ -50,21 +50,18 @@ while True:
     
     # pos = getPosition()
     # an array of angles as seen by each eye (assuming that the mouse is 200 px outside the screen)
-    # iris_angle = np.arctan((pygame.mouse.get_pos()[0] - xpos) / 200)
+    iris_angle = np.arctan((pygame.mouse.get_pos()[0] - xpos) / 200)
     
     # update surfaces 
     screen.blit(bg, (0,0))
-    screen.blit(iris, (400,800))
-    # screen.blit(eyeball, (400, 200))
     
     i = 0
     for x in xpos:
         for y in ypos:
-            screen.blit(eyeball, (x, y))
+            eyeball_rect.center = (x, y)
+            screen.blit(eyeball, eyeball_rect)
             # screen.blit(iris, (x,y))
-            # pygame.draw.circle(screen, "azure2", (x, y), 20)
-            # pygame.draw.circle(screen, "black", (x, y), 20, 5)
-            # pygame.draw.circle(bg, "black", (iris_angle[i] * x * 2 / np.pi, y),3)
+            pygame.draw.circle(eyeball, "black", (iris_angle[i] * x * 2 / np.pi, y),3)
         i += 1
 
     # pygame.draw.circle(bg, 'black', pygame.mouse.get_pos(), 5)
