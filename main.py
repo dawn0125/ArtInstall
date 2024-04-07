@@ -12,16 +12,8 @@ from sys import exit
 import serial 
 import numpy as np 
 
-# def getPosition():
-#     # get data from MSP430 
-#     data = ser.read(1) 
-#     if len(data) > 0: 
-#         distance = ord(data) 
-#         print(distance)
-#         theta = ((distance - x0) // y)
-        
-#     return theta 
 
+        
 # read port (information coming from MSP430)
 # port = '/dev/tty.usbmodem11203'
 x0 = np.array([])
@@ -34,13 +26,16 @@ clock = pygame.time.Clock()
 
 # set screen 
 screen = pygame.display.set_mode((800, 400))
-bg = pygame.Surface((800, 400)).convert()
+bg = pygame.Surface((800, 400)).convert_alpha()
 bg.fill('White')
 
-# eye = pygame.image.load('/Users/dawnzheng/Desktop/39.png').convert_alpha()
-# iris = pygame.image.load('/Users/dawnzheng/Desktop/iris3.png').convert_alpha()
-# iris_rect = iris.get_rect(center = (400, 200))
-# ey_rect = eye.get_rect(center = (400, 200)) 
+eyeball = pygame.image.load('eyeball3.png')
+eyeball = pygame.transform.scale(eyeball, (40,40))
+eyeball_rect = eyeball.get_rect(center = (400, 200))
+
+iris = pygame.image.load('iris3.png')
+iris = pygame.transform.scale(iris, (10,10))
+
 
 # with serial.Serial(port,9600,timeout = 0.050) as ser:
 #     print(ser.name)
@@ -55,16 +50,21 @@ while True:
     
     # pos = getPosition()
     # an array of angles as seen by each eye (assuming that the mouse is 200 px outside the screen)
-    iris_angle = np.arctan((pygame.mouse.get_pos()[0] - xpos) / 200)
+    # iris_angle = np.arctan((pygame.mouse.get_pos()[0] - xpos) / 200)
     
     # update surfaces 
     screen.blit(bg, (0,0))
-
+    screen.blit(iris, (400,800))
+    # screen.blit(eyeball, (400, 200))
+    
     i = 0
     for x in xpos:
         for y in ypos:
-            pygame.draw.circle(bg, "azure2", (x, y), 20)
-            pygame.draw.circle(bg, "black", (iris_angle[i] * x * 2 / np.pi, y),5)
+            screen.blit(eyeball, (x, y))
+            # screen.blit(iris, (x,y))
+            # pygame.draw.circle(screen, "azure2", (x, y), 20)
+            # pygame.draw.circle(screen, "black", (x, y), 20, 5)
+            # pygame.draw.circle(bg, "black", (iris_angle[i] * x * 2 / np.pi, y),3)
         i += 1
 
     # pygame.draw.circle(bg, 'black', pygame.mouse.get_pos(), 5)
