@@ -12,20 +12,21 @@ from sys import exit
 import serial 
 import numpy as np 
 
-def getPosition():
-    # get data from MSP430 
-    data = ser.read(1) 
-    if len(data) > 0: 
-        distance = ord(data) 
-        print(distance)
-        theta = ((distance - x0) // y)
+# def getPosition():
+#     # get data from MSP430 
+#     data = ser.read(1) 
+#     if len(data) > 0: 
+#         distance = ord(data) 
+#         print(distance)
+#         theta = ((distance - x0) // y)
         
-    return theta 
+#     return theta 
 
 # read port (information coming from MSP430)
 # port = '/dev/tty.usbmodem11203'
 x0 = np.array([])
-y = 300 #cm 
+xpos = np.arange(100, 800, 100)
+ypos = np.arange(100, 400, 100)
 
 # initiate pygame 
 pygame.init() 
@@ -35,7 +36,6 @@ clock = pygame.time.Clock()
 screen = pygame.display.set_mode((800, 400))
 bg = pygame.Surface((800, 400)).convert()
 bg.fill('White')
-# eyeball = pygame.draw.circle(bg, 'azure2', (400, 200), 50)
 
 # eye = pygame.image.load('/Users/dawnzheng/Desktop/39.png').convert_alpha()
 # iris = pygame.image.load('/Users/dawnzheng/Desktop/iris3.png').convert_alpha()
@@ -53,43 +53,21 @@ while True:
             pygame.quit() 
             exit() 
     
-    pos = getPosition()
+    # pos = getPosition()
+    # an array of angles as seen by each eye (assuming that the mouse is 200 px outside the screen)
+    iris_angle = np.arctan((pygame.mouse.get_pos()[0] - xpos) / 200)
     
     # update surfaces 
     screen.blit(bg, (0,0))
-    
-    pygame.draw.circle(bg, 'azure2', (100, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (100, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (100, 300), 20)
 
-    pygame.draw.circle(bg, 'azure2', (200, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (200, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (200, 300), 20)
+    i = 0
+    for x in xpos:
+        for y in ypos:
+            pygame.draw.circle(bg, "azure2", (x, y), 20)
+            pygame.draw.circle(bg, "black", (iris_angle[i] * x * 2 / np.pi, y),5)
+        i += 1
 
-    pygame.draw.circle(bg, 'azure2', (300, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (300, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (300, 300), 20)
-
-    pygame.draw.circle(bg, 'azure2', (400, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (400, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (400, 300), 20)
-
-    pygame.draw.circle(bg, 'azure2', (500, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (500, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (500, 300), 20)
-
-    pygame.draw.circle(bg, 'azure2', (600, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (600, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (600, 300), 20)
-
-    pygame.draw.circle(bg, 'azure2', (700, 100), 20)
-    pygame.draw.circle(bg, 'azure2', (700, 200), 20)
-    pygame.draw.circle(bg, 'azure2', (700, 300), 20)
-    
-    x = np.arctan((pygame.mouse.get_pos()[0] - 100) / 200)
-    print(x)
-
-    pygame.draw.circle(bg, 'black', pygame.mouse.get_pos(), 5)
+    # pygame.draw.circle(bg, 'black', pygame.mouse.get_pos(), 5)
     # screen.blit(eye, ey_rect)
     # screen.blit(iris, iris_rect)
 
